@@ -1,0 +1,87 @@
+
+.social-list {
+    height: 100%;
+    flex: 80%;
+    margin-right: 10px;
+}
+
+.social {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    background-color: white;
+}
+
+.social-title,.social-expander {
+    margin-left: 15px;
+}
+
+.social-expander {
+    text-decoration: none;
+}
+
+.social-expander[aria-expanded="true"]:before {
+    content: '-';
+}
+
+.social-expander[aria-expanded="false"]:before {
+    content: '+';
+}
+ 
+.social-thread {
+    position: relative;
+    padding-bottom: 10px;
+    margin-left: 20px;
+}
+
+.social-thread-even {
+    background-color: white;
+}
+
+.social-thread-odd {
+    background-color: #f0f0f0;
+}
+
+.social-title {
+    padding-top: 10px;
+}
+
+.social-date {
+    color: darkgray;
+}
+
+.social-user,.social-date {
+    display: inline-block;
+}
+
+.social-date,.social-category,.social-user,.social-content {
+    font-size: small;
+}
+
+.social-title a {
+    color: black;
+    text-decoration: auto;
+}
+
+.social-content {
+    white-space: pre-line;
+}
+
+.social-reply-button {
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.user-button, .user-button:hover, .user-button:focus {
+    color: black;
+    font-size: small;
+    padding-top: 0px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    box-shadow: none;
+    text-decoration: none;
+}
+
+span {
+    display: block;
+}

@@ -1,0 +1,17 @@
+.header {
+  width: 100%;
+  background-color: black;
+  color: white;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.network-selector {
+  position: absolute;
+}
+
+@media (max-width: 768px) {
+  .header{
+    display: none;
+  }
+}

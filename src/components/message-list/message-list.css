@@ -1,0 +1,45 @@
+
+.message-list {
+    height: 100%;
+    flex: 80%;
+    margin-right: 10px;
+}
+
+.message {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: white;
+}
+
+.message-from {
+    padding-top: 10px;
+}
+
+.message-date {
+    font-size: small;
+}
+
+.message-text {
+    white-space: pre-line;
+    font-size: small;
+}
+
+.user-button, .user-button:hover, .user-button:focus {
+    color: black;
+    font-size: small;
+    padding-top: 0px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    box-shadow: none;
+    text-decoration: none;
+}
+
+span {
+    margin-left: 15px;
+    display: block;
+}
+
+.message-button {
+    margin-bottom: 15px;
+    margin-top: 15px;
+}

@@ -1,0 +1,56 @@
+
+.item-list {
+    height: 100%;
+    flex: 80%;
+    margin-right: 10px;
+}
+
+.item {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: white;
+}
+
+.item a,span {
+    margin-left: 15px;
+}
+
+.item-title {
+    padding-top: 10px;
+}
+
+.item-price {
+    padding-bottom: 15px;
+}
+
+.item-date,.item-category,.item-location,.item-seller,.item-description {
+    font-size: small;
+}
+
+.item-title a {
+    color: black;
+    text-decoration: auto;
+}
+
+.item-description {
+    white-space: pre-line;
+}
+
+.item-message-button {
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.user-button, .user-button:hover, .user-button:focus {
+    color: black;
+    font-size: small;
+    padding-top: 0px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    box-shadow: none;
+    text-decoration: none;
+}
+
+span {
+    display: block;
+}

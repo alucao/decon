@@ -1,0 +1,24 @@
+
+.category-list {
+    background-color: white;
+    margin: 10px;
+    flex: 20%;
+}
+
+.category-list-title {
+    font-size: large;
+    font-weight: bold;
+    align-items: center;
+    text-align: center;
+    padding: 5px;
+}
+
+.category-button, .category-button:hover, .category-button:focus {
+    color: black;
+    padding-top: 0px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    box-shadow: none;
+    text-decoration: none;
+    font-weight: bold;
+}

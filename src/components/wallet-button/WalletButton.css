@@ -1,0 +1,20 @@
+
+.wallet-button {
+    height: 40px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+@media (min-width: 768px) {
+    .wallet-button {
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wallet-button {
+        max-width: 130px;
+    }
+}

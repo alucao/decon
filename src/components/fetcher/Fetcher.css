@@ -1,0 +1,47 @@
+.fetcher {
+  font-size: small;
+  width: 100%;
+  background-color: darkcyan;
+  color: white;
+
+  display: grid;
+  grid-template-columns: 80% 20%;
+  grid-template-areas:
+    'status lastcheck';
+}
+
+.fetcher-status {
+  margin-left: 20px;
+  text-align: left;
+  grid-area: "status";
+}
+
+.fetcher-lastcheck {
+  margin-right: 20px;
+  text-align: right;
+  grid-area: "lastcheck";
+}
+
+.fetcher-loader {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  margin-left: 10px;
+  border: 7px solid #f3f3f3; /* Light grey */
+  border-top: 7px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .fetcher{
+    display: none;
+  }
+}

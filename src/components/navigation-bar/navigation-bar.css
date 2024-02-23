@@ -1,0 +1,40 @@
+
+.nav-item {
+    cursor: pointer;
+}
+
+.left-bar {
+    padding-left: 10px;
+}
+
+.right-bar {
+    padding-right: 10px;
+}
+
+.navigation-desktop, .navigation-smartphone {
+    display: flex;
+}
+
+
+@media (max-width: 768px) {
+    .navigation-desktop {
+      display: none;
+    }
+
+    .navigation-fixed-smartphone {
+        display: contents;
+    }
+
+    .navigation-navbar-smartphone {
+        z-index: 999;
+        position: fixed;
+        width: 100%;
+    }
+}
+
+@media (min-width: 768px) {
+    .navigation-smartphone {
+      display: none;
+    }
+}
+
