@@ -2,7 +2,7 @@
     "name": "decon",
     "version": "0.1.0",
     "description": "Decentralized social network and marketplace on Cardano blockchain",
-    "homepage": "https://cao.github.io/decon",
+    "homepage": "https://alucao.github.io/decon",
     "main": "index.js",
     "scripts": {
         "predeploy": "npm run build",
