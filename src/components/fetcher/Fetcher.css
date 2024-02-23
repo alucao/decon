@@ -41,7 +41,7 @@
 }
 
 @media (max-width: 768px) {
-  .fetcher{
-    display: none;
+  .fetcher {
+    font-size: x-small;
   }
 }
