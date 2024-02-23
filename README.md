@@ -31,4 +31,4 @@ Provided "as is" without warranty of any kind. Use at your own risk.
 
 * Project under development, new features to be added.
 * User feedback and suggestions welcome.
-* Discord: https://discord.gg/zKMQ9fBZrQ
+* Discord: https://discord.gg/qwDuBqThZS
