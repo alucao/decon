@@ -1,10 +1,9 @@
 import NinjaConfig from './ninjaConfig';
 const Cardano = await (async () => await require("@emurgo/cardano-serialization-lib-browser"))();
 const Message = await (async () => await require("@emurgo/cardano-message-signing-browser"))();
-  
+
 const yaml = require('js-yaml');
 let Buffer = require('buffer/').Buffer
-
 
 const getStakeAddress = async (api: any) => {
   console.log("START getStakeAddress " + api);
@@ -161,6 +160,19 @@ const sendTransaction = async (api: any, auxiliaryData: any) => {
 
   return submittedTxHash;
 }
+
+// secret used to generate the private key for private messages
+export const getStakeAddressSignature = async (api: any) => {
+  const rewardAddress = await api.getRewardAddresses();
+  const stakeAddressHex = rewardAddress[0];
+  const stakeAddress = Cardano.Address.from_bytes(Buffer.from(stakeAddressHex, "hex"));
+  const messageText = `This signature is required to decrypt private messages for ${stakeAddress.to_bech32()}`
+  console.log(messageText)
+  const cose = await api.signData(stakeAddressHex, Buffer.from(messageText).toString('hex'));
+  let signature = cose.signature
+  console.log('signature', signature);
+  return signature
+} 
 
 const signMessage = async (api: any, json: any) => {
   const rewardAddress = await api.getRewardAddresses();
