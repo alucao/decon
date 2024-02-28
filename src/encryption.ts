@@ -27,16 +27,10 @@ async function encryptMessage(publicKeyHexSrc: string, publicKeyHexDst: string, 
     symmetricKey,
     iv
   );
-  console.log("encryptedMessage");
-  console.log(getHex(encryptedMessage));
 
   const data = Buffer.from(symmetricKeyHex);
   const encryptedSymmetricKeySrc: Buffer = encrypt(publicKeyHexSrc, data);
-  console.log("encryptedSymmetricKeySrc");
-  console.log(encryptedSymmetricKeySrc.toString("hex"));
   const encryptedSymmetricKeyDst: Buffer = encrypt(publicKeyHexDst, data);
-  console.log("encryptedSymmetricKeyDst");
-  console.log(encryptedSymmetricKeyDst.toString("hex"));
 
   return {
     keySrc: encryptedSymmetricKeySrc.toString("hex"),
@@ -123,6 +117,7 @@ function hexStringToBytes(hexString: string): Uint8Array {
   }
   return bytes;
 }
+
 async function generateSymmetricKey() {
   const algorithm = { name: "AES-GCM", length: 256 };
   const crypto = require("crypto"); // window.crypto;
@@ -130,12 +125,11 @@ async function generateSymmetricKey() {
   return await subtle.generateKey(algorithm, true, ["encrypt", "decrypt"]);
 }
 
-async function generateKeyPairFromPassword(password: string): Promise<KeyPair> {
-  const passwordBuffer = new TextEncoder().encode(password);
+async function generateKeyPairFromPassword(passwordBytes: Uint8Array): Promise<KeyPair> {
   const salt = Uint8Array.from({ length: 16 }, () => 0);
   const keyMaterial = await crypto.subtle.importKey(
     "raw",
-    passwordBuffer,
+    passwordBytes,
     { name: "PBKDF2" },
     false,
     ["deriveBits", "deriveKey"]
@@ -163,4 +157,4 @@ async function generateKeyPairFromPassword(password: string): Promise<KeyPair> {
   };
 }
 
-export  { generateKeyPairFromPassword, encryptMessage, decryptMessage };
+export  { hexStringToBytes, generateKeyPairFromPassword, encryptMessage, decryptMessage };
