@@ -1,5 +1,4 @@
 import NinjaConfig from './ninjaConfig';
-//const NinjaConfig = require('./ninjaConfig');
 
 import { getCategories } from './api/categories';
 import { getSocialCategories } from './api/socialcategories';
