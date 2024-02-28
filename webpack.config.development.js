@@ -92,7 +92,13 @@ module.exports = (env, options) =>
                 },
             ],
         },
-        resolve: { extensions: [".tsx", ".ts", ".js"] },
+        resolve: { 
+            extensions: [".tsx", ".ts", ".js"],
+            fallback: { 
+                "crypto": require.resolve("crypto-browserify"),
+                "stream": require.resolve("stream-browserify"),
+            },
+        },
         output: {
             filename: "js/[name].bundle.js",
             path: path.resolve(__dirname, outputConfig.destPath),
