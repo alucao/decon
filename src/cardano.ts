@@ -203,7 +203,7 @@ export const getStakeAddressSignature = async (api: any) => {
   const stakeAddress = Cardano.Address.from_bytes(
     Buffer.from(stakeAddressHex, "hex")
   );
-  const messageText = `This signature is required to decrypt private messages for ${stakeAddress.to_bech32()}`;
+  const messageText = `[decon.app] This signature is required to\n decrypt private messages for\n ${stakeAddress.to_bech32()}`;
   console.log(messageText);
   const cose = await api.signData(
     stakeAddressHex,
