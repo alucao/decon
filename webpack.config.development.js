@@ -121,6 +121,9 @@ module.exports = (env, options) => {
       new webpack.DefinePlugin({
         "process.env": JSON.stringify(process.env),
       }),
+      new webpack.ProvidePlugin({
+        Buffer: ["buffer", "Buffer"],
+      }),
       /* new InjectManifest({
                 swSrc: './src/service-worker.js',
                 swDest: 'service-worker.js',
