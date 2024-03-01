@@ -2,7 +2,7 @@
 
 **Decentralized Community Platform with On-Chain Storage on Cardano blockchain**
 
-**Github Pages Website**: https://alucao.github.io/decon/
+**Website**: https://decon.app/ or https://alucao.github.io/decon/
 
 ## Technical Overview
 
@@ -13,7 +13,7 @@
   - **On-Chain Data Storage:** Content and interactions permanently etched onto the blockchain for maximum immutability and transparency.
   - **Browser-Based Wallets:** Users utilize Cardano wallets running directly in their browser for direct on-chain transactions.
   - **Progressive Web App:** Install the platform directly on your device for offline access and enhanced privacy.
-  - **Open-source:** Project code available on GitHub for community contributions.
+  - **Open-source:** Project code available on GitHub for community contributions. Application runs from a github pages website.
 - **Technology Stack:**
   - Blockchain: Cardano
   - Front-End: HTML5, CSS, JavaScript/TypeScript (framework: React)
