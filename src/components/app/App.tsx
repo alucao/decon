@@ -391,7 +391,6 @@ function App() {
       hexStringToBytes(signature)
     );
     const toUser = await fetchUser(_to);
-    debugger;
     const encryptedMessage = await encryptMessage(
       keyPair.publicKey,
       toUser!!.publicKey,
@@ -449,6 +448,8 @@ function App() {
         category: "User",
         action: "Failed creating a Transaction",
       });
+
+      throw err;
     }
   };
 

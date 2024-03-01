@@ -115,11 +115,6 @@ const sendTransaction = async (api: any, auxiliaryData: any) => {
       .build()
   );
 
-  let changeAddress = await api.getChangeAddress();
-  let shelleyChangeAddress = Cardano.Address.from_bytes(
-    Buffer.from(changeAddress, "hex")
-  );
-
   let websiteWalletAddress = new NinjaConfig().getCfg().WALLET_ADDRESS;
   let shelleyOutputAddress = Cardano.Address.from_bech32(websiteWalletAddress);
 
@@ -148,9 +143,18 @@ const sendTransaction = async (api: any, auxiliaryData: any) => {
   txBuilder.add_inputs_from(
     txUnspentOutputs,
     Cardano.CoinSelectionStrategyCIP2.LargestFirstMultiAsset
+    //Cardano.CoinSelectionStrategyCIP2.RandomImproveMultiAsset
   );
+
   console.log("Adding change");
+  let changeAddress = await api.getChangeAddress();
+  let shelleyChangeAddress = Cardano.Address.from_bytes(
+    Buffer.from(changeAddress, "hex")
+  );
+  console.log("changeAddress");
+  console.log(shelleyChangeAddress.to_bech32());
   txBuilder.add_change_if_needed(shelleyChangeAddress);
+
   console.log("Building");
   const txBody = txBuilder.build();
 
