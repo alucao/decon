@@ -2,7 +2,9 @@
 
 **Decentralized Community Platform with On-Chain Storage on Cardano blockchain**
 
-**Website**: https://decon.app/ or https://alucao.github.io/decon/
+**Website**: [decon.app](https://decon.app)
+
+**Github Pages Website**: https://alucao.github.io/decon/
 
 ## Technical Overview
 
