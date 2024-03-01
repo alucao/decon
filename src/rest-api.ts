@@ -1,46 +1,46 @@
-import NinjaConfig from './ninjaConfig';
-
-import { getCategories } from './api/categories';
-import { getSocialCategories } from './api/socialcategories';
-import { getConfig } from './api/config';
-import { getLocations } from './api/locations';
-import { getMessages } from './api/messages';
-import { getPosts } from './api/posts';
-import { getSocials } from './api/socials';
-import { getSubcategories } from './api/subcategories';
-import { getSublocations } from './api/sublocations';
-import { getUser } from './api/users';
+import { getCategories } from "./api/categories";
+import { getSocialCategories } from "./api/socialcategories";
+import { getConfig } from "./api/config";
+import { getLocations } from "./api/locations";
+import { getMessages } from "./api/messages";
+import { getPosts } from "./api/posts";
+import { getSocials } from "./api/socials";
+import { getSubcategories } from "./api/subcategories";
+import { getSublocations } from "./api/sublocations";
+import { getUser } from "./api/users";
 
 async function fetchConfig() {
   const data = await getConfig();
   return data;
 }
 
-async function fetchUser(username: string) {
-  console.log("fetching user")
-  console.log(username)
-  const data = await getUser(username);
+async function fetchUser(username: string): Promise<User | null> {
+  console.log("fetching user");
+  console.log(username);
+  const data = await getUser(username, undefined);
   return data;
 }
 
-async function fetchUserByStakeAddr(stakeAddress: string) {
+async function fetchUserByStakeAddr(
+  stakeAddress: string
+): Promise<User | null> {
   const data = await getUser(undefined, stakeAddress);
   return data;
 }
 
-async function fetchPosts(query: string|null) {
+async function fetchPosts(query: string | null) {
   const data = await getPosts();
   return data;
 }
 
-async function fetchSocials(query: string|null) {
+async function fetchSocials(query: string | null) {
   const data = await getSocials();
   return data;
 }
 
 async function fetchMessages(user: string) {
   const data = await getMessages(user);
-  console.log('Messages: ' + data);
+  console.log("Messages: " + data);
   return data;
 }
 
@@ -69,4 +69,16 @@ async function fetchSublocations() {
   return data;
 }
 
-export { fetchConfig, fetchUserByStakeAddr, fetchUser, fetchPosts, fetchSocials, fetchMessages, fetchCategories, fetchSocialCategories, fetchSubcategories, fetchLocations, fetchSublocations }
+export {
+  fetchConfig,
+  fetchUserByStakeAddr,
+  fetchUser,
+  fetchPosts,
+  fetchSocials,
+  fetchMessages,
+  fetchCategories,
+  fetchSocialCategories,
+  fetchSubcategories,
+  fetchLocations,
+  fetchSublocations,
+};

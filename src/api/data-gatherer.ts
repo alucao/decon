@@ -4,20 +4,22 @@ import { KoiosApiClient } from "./clients/koios";
 import NinjaConfig from "../ninjaConfig";
 import { getSettings } from "./settings";
 
-const Cardano = await (async () => await require("@emurgo/cardano-serialization-lib-browser"))();
-const Message = await (async () => await require("@emurgo/cardano-message-signing-browser"))();
+const Cardano = await (async () =>
+  await require("@emurgo/cardano-serialization-lib-browser"))();
+const Message = await (async () =>
+  await require("@emurgo/cardano-message-signing-browser"))();
 
-const Buffer = require('buffer/').Buffer
-const yaml = require('js-yaml');
-const db = require('../db/dbConnection');
+const Buffer = require("buffer/").Buffer;
+const yaml = require("js-yaml");
+const db = require("../db/dbConnection");
 
 let database = db.getDb();
 
-let apiClient : ApiClient;
+let apiClient: ApiClient;
 
 function initApiClient(provider, apiKey) {
-  console.log(provider)
-  console.log(apiKey)
+  console.log(provider);
+  console.log(apiKey);
   if (provider == "KOIOS") {
     return new KoiosApiClient(apiKey);
   } else {
@@ -30,7 +32,7 @@ async function updateSettings(isProd, provider, apiKey) {
     isProd: isProd,
     provider: provider,
     apiKey: apiKey,
-  })
+  });
 }
 
 async function setSettings(isProd, provider, key) {
@@ -42,25 +44,22 @@ async function clearDb() {
   await database.clearDatabase();
 }
 
-async function processTransaction(txHash, transactionTime, metadataJsonObj)
-{
+async function processTransaction(txHash, transactionTime, metadataJsonObj) {
   //let metadataJsonObj = JSON.parse(metadataJson);
 
   // rebuild signature
-  let signature = '';
+  let signature = "";
   for (let i = 0; i < 50; i++) {
     let index = `s_${i}`;
-    if (!metadataJsonObj[index])
-      break;
+    if (!metadataJsonObj[index]) break;
     signature += metadataJsonObj[index];
   }
 
   // rebuild key
-  let key = '';
+  let key = "";
   for (let i = 0; i < 50; i++) {
     let index = `k_${i}`;
-    if (!metadataJsonObj[index])
-      break;
+    if (!metadataJsonObj[index]) break;
     key += metadataJsonObj[index];
   }
 
@@ -73,7 +72,7 @@ async function processTransaction(txHash, transactionTime, metadataJsonObj)
     headermap.header(Message.Label.new_text("address")).as_bytes()
   );
 
-  let payloadBytes = message.payload()
+  let payloadBytes = message.payload();
   let payload = Buffer.from(payloadBytes, "hex");
 
   let payloadObj = yaml.load(payload.toString("utf-8"));
@@ -97,14 +96,12 @@ async function processTransaction(txHash, transactionTime, metadataJsonObj)
   }
 
   // get the stake address associated with the user
-  let stakeAddress = '';
+  let stakeAddress = "";
   let isFirstTimeUser = false;
   let user = await database.findUserByName(username);
-  let userinfo = '';
   if (!user) {
     isFirstTimeUser = true;
-    stakeAddress = payloadObj.stake_addr;
-    userinfo = payloadObj.userinfo;
+    stakeAddress = payloadObj.stakeAddr;
     if (!stakeAddress) {
       console.log("Invalid stake address");
       return;
@@ -118,15 +115,19 @@ async function processTransaction(txHash, transactionTime, metadataJsonObj)
   }
 
   if (address.to_bech32() !== stakeAddress) {
-    console.log('Signature address doesnt match registered stake address');
+    console.log("Signature address doesnt match registered stake address");
     return;
   }
 
   const coseKey = Message.COSEKey.from_bytes(Buffer.from(key, "hex"));
   const publicKey = Cardano.PublicKey.from_bytes(
-    coseKey.header(
-      Message.Label.new_int(Message.Int.new_negative(Message.BigNum.from_str("2")))
-    ).as_bytes()
+    coseKey
+      .header(
+        Message.Label.new_int(
+          Message.Int.new_negative(Message.BigNum.from_str("2"))
+        )
+      )
+      .as_bytes()
   );
 
   const stakeKeyHash = publicKey.hash();
@@ -135,23 +136,28 @@ async function processTransaction(txHash, transactionTime, metadataJsonObj)
     Cardano.StakeCredential.from_keyhash(stakeKeyHash)
   );
   if (address.to_bech32() !== reconstructedAddress.to_address().to_bech32()) {
-    console.log('Signature address doesnt match public key address');
+    console.log("Signature address doesnt match public key address");
     return;
   }
 
   const data = message.signed_data().to_bytes();
-  const ed25519Sig = Cardano.Ed25519Signature.from_bytes(message.signature())
+  const ed25519Sig = Cardano.Ed25519Signature.from_bytes(message.signature());
   if (!publicKey.verify(data, ed25519Sig)) {
     throw new Error(
       `Message integrity check failed (has the message been tampered with?)`
     );
-  }
-  else {
+  } else {
     console.log("Message verified!");
   }
 
   if (isFirstTimeUser) {
-    await database.insertUser({ user: username, userinfo: userinfo, stakeAddress: stakeAddress, ts: transactionTime });
+    await database.insertUser({
+      user: username,
+      userinfo: payloadObj.userinfo,
+      stakeAddress: stakeAddress,
+      publicKey: payloadObj.publicKey,
+      ts: transactionTime,
+    });
   }
   await database.insertGuid({ guid: guid });
 
@@ -161,6 +167,9 @@ async function processTransaction(txHash, transactionTime, metadataJsonObj)
     handleMessage(username, transactionTime, guid, payloadObj);
   } else if (payloadObj.type == "social") {
     handleSocial(username, transactionTime, guid, payloadObj);
+  } else {
+    console.log("Error: Could not determine type of transaction");
+    console.log(payloadObj);
   }
 
   return true;
@@ -184,16 +193,20 @@ async function handlePost(username, transactionTime, guid, payloadObj) {
   if (payloadObj.category)
     await database.incrementCategory({ category: payloadObj.category });
   if (payloadObj.subcategory)
-    await database.incrementSubcategory({ subcategory: payloadObj.subcategory });
+    await database.incrementSubcategory({
+      subcategory: payloadObj.subcategory,
+    });
   if (payloadObj.location)
     await database.incrementLocation({ location: payloadObj.location });
   if (payloadObj.sublocation)
-    await database.incrementSublocation({sublocation: payloadObj.sublocation });
+    await database.incrementSublocation({
+      sublocation: payloadObj.sublocation,
+    });
 }
 
 async function handleSocial(username, transactionTime, guid, payloadObj) {
   // TODO validate fields
-  let social : any = {
+  let social: any = {
     from: username,
     ts: transactionTime,
     guid: guid,
@@ -201,7 +214,7 @@ async function handleSocial(username, transactionTime, guid, payloadObj) {
   };
 
   if (!payloadObj.parent) {
-    // it is a new thread 
+    // it is a new thread
     social.title = payloadObj.title;
     social.category = payloadObj.category;
   } else {
@@ -217,17 +230,21 @@ async function handleSocial(username, transactionTime, guid, payloadObj) {
 
 async function handleMessage(username, transactionTime, guid, payloadObj) {
   // TODO validate fields
+  console.log("Handling message...");
+  console.log(payloadObj);
   await database.insertMessage({
     from: username,
     ts: transactionTime,
     guid: guid,
     to: payloadObj.to,
+    srcKey: payloadObj.srcKey,
+    dstKey: payloadObj.dstKey,
+    iv: payloadObj.iv,
     message: payloadObj.message,
   });
 }
 
 async function populateDb(lastBlock) {
-
   const metadataLabel = new NinjaConfig().getCfg().METADATA_LABEL;
 
   let lastTransaction = {
@@ -235,38 +252,42 @@ async function populateDb(lastBlock) {
     block: lastBlock ?? 1,
     ts: 123,
     metadata: null,
-  }
+  };
 
   if (!apiClient) {
     let settings = await getSettings();
-    apiClient = initApiClient(settings.provider, settings.apiKey)
+    apiClient = initApiClient(settings.provider, settings.apiKey);
   }
   let transactions = await apiClient.getTransactions(lastTransaction);
 
   for (let transaction of transactions) {
-
     // check if tx_hash already processed
     let isAlreadyProcessed = await database.findTransaction(transaction.hash);
-    if (isAlreadyProcessed)
-      continue;
-    
+    if (isAlreadyProcessed) continue;
+
     console.log(`Processing tx ${transaction.hash}...`);
-    
+
     // process json metadata
     console.log("Processing: ", transaction.hash);
     try {
-      await processTransaction(transaction.hash, transaction.ts, transaction.metadata[metadataLabel]);
+      await processTransaction(
+        transaction.hash,
+        transaction.ts,
+        transaction.metadata[metadataLabel]
+      );
     } catch (exception) {
-      console.log(`Failed processing transaction ${transaction.hash}: ${exception}`);
+      console.log(
+        `Failed processing transaction ${transaction.hash}: ${exception}`
+      );
     }
 
     // register tx_hash to our db, so it is skipped next time
     database.insertTransaction({ transactionId: transaction.hash });
   }
-  
-  lastBlock = Math.max(lastBlock, ...transactions.map(tx => tx.block));
-  console.log(lastBlock)
+
+  lastBlock = Math.max(lastBlock, ...transactions.map((tx) => tx.block));
+  console.log(lastBlock);
   return lastBlock;
 }
 
-export { populateDb, setSettings, clearDb }
+export { populateDb, setSettings, clearDb };

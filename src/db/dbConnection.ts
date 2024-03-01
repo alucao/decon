@@ -15,67 +15,6 @@ let sublocations: PouchDB.Database<DbSublocation>;
 let socialcategories: PouchDB.Database<DbSocialCategory>;
 let settings: PouchDB.Database;
 
-interface DbObject {
-  _id: any;
-  _rev: any;
-}
-
-interface DbPost extends DbObject {
-  guid: string;
-  from: string;
-  message: string;
-  category: string;
-  ts: number;
-}
-
-interface DbSocial extends DbObject {
-  guid: string;
-  from: string;
-  message: string;
-  category: string;
-  ts: number;
-}
-
-interface DbUser extends DbObject {
-  user: string;
-  stakeAddress: string;
-  publicKey: string;
-  privateKey: string;
-}
-
-interface DbMessage extends DbObject {
-  guid: string;
-  from: string;
-  to: string;
-  message: string;
-  ts: number;
-}
-
-interface DbSocialCategory extends DbObject {
-  category: string;
-  count: number;
-}
-
-interface DbCategory extends DbObject {
-  category: string;
-  count: number;
-}
-
-interface DbSubcategory extends DbObject {
-  subcategory: string;
-  count: number;
-}
-
-interface DbLocation extends DbObject {
-  location: string;
-  count: number;
-}
-
-interface DbSublocation extends DbObject {
-  sublocation: string;
-  count: number;
-}
-
 function initDatabase() {
   posts = new PouchDB(".pouchdb/posts");
   socials = new PouchDB(".pouchdb/socials");
@@ -219,7 +158,7 @@ let database = {
       index: { fields: ["ts"] },
     });
     let result = await messages.find({
-      selector: { ts: { $gte: null }, to: user },
+      selector: { ts: { $gte: null }, $or: [{ to: user }, { from: user }] },
       sort: ["ts"],
       limit: 100,
     });
