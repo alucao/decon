@@ -1,23 +1,24 @@
 const { encrypt, decrypt, PrivateKey } = require("eciesjs");
 
-interface KeyPair {
-  publicKey: string;
-  privateKey: string;
-}
-
-interface EncryptedMessage {
-  keySrc: string;
-  keyDst: string;
-  iv: string;
-  message: string;
-}
+const crypto =
+  typeof window !== "undefined" ? window.crypto : require("crypto");
+const subtle = crypto.subtle;
+import { Buffer } from "buffer";
 
 // create a random symmetric key
 // encrypt the symmetric key with the public key from the source
 // encrypt the symmetric key with the public key from the destination
 // encrypt the message with the symmetric key
 // return { key_src, key_dst, iv, message }
-async function encryptMessage(publicKeyHexSrc: string, publicKeyHexDst: string, message: string): Promise<EncryptedMessage> {
+async function encryptMessage(
+  publicKeyHexSrc: string,
+  publicKeyHexDst: string,
+  message: string
+): Promise<EncryptedMessage> {
+  if (!publicKeyHexSrc) throw new Error("publicKeyHexSrc is required");
+  if (!publicKeyHexDst) throw new Error("publicKeyHexDst is required");
+  if (!message) throw new Error("message is required");
+
   const symmetricKey = await generateSymmetricKey();
   const symmetricKeyHex = await getHexFromKey(symmetricKey);
 
@@ -33,23 +34,39 @@ async function encryptMessage(publicKeyHexSrc: string, publicKeyHexDst: string, 
   const encryptedSymmetricKeyDst: Buffer = encrypt(publicKeyHexDst, data);
 
   return {
-    keySrc: encryptedSymmetricKeySrc.toString("hex"),
-    keyDst: encryptedSymmetricKeyDst.toString("hex"),
+    srcKey: encryptedSymmetricKeySrc.toString("hex"),
+    dstKey: encryptedSymmetricKeyDst.toString("hex"),
     iv: getHex(iv),
     message: getHex(encryptedMessage),
-  }
+  };
 }
 
-async function decryptMessage(privateKey: string, encryptedSymmetricKey:string, iv: string, message: string): Promise<string> {
-  // decrypt the symmetric key with the private key
-  // decrypt the message with the symmetric key
-  const decryptedSymmetricKeyHex = decrypt(privateKey, Buffer.from(encryptedSymmetricKey, 'hex'));
-  const decryptedSymmetricKey = await importSymmetricKeyFromHex(decryptedSymmetricKeyHex.toString());
+// decrypt the symmetric key with the private key
+// decrypt the message with the symmetric key
+async function decryptMessage(
+  privateKey: string,
+  encryptedSymmetricKey: string,
+  iv: string,
+  message: string
+): Promise<string> {
+  if (!privateKey) throw new Error("privateKey is required");
+  if (!encryptedSymmetricKey)
+    throw new Error("encryptedSymmetricKey is required");
+  if (!iv) throw new Error("iv is required");
+  if (!message) throw new Error("message is required");
+
+  const decryptedSymmetricKeyHex = decrypt(
+    privateKey,
+    Buffer.from(encryptedSymmetricKey, "hex")
+  );
+  const decryptedSymmetricKey = await importSymmetricKeyFromHex(
+    decryptedSymmetricKeyHex.toString()
+  );
   const decryptedMessage = await decryptWithSymmetricKey(
-    Buffer.from(message, 'hex'),
-    Buffer.from(iv, 'hex'),
+    Buffer.from(message, "hex"),
+    Buffer.from(iv, "hex"),
     decryptedSymmetricKey
-  );  
+  );
   return decryptedMessage;
 }
 
@@ -67,8 +84,6 @@ async function encryptWithSymmetricKey(
   const textBytes = new TextEncoder().encode(text);
   const algorithm = { name: "AES-GCM", iv: iv };
 
-  const crypto = require("crypto"); // window.crypto || window.webkitCrypto;
-  const subtle = crypto.subtle;
   const encryptedData = await subtle.encrypt(algorithm, key, textBytes);
   return encryptedData;
 }
@@ -79,8 +94,6 @@ async function decryptWithSymmetricKey(
   key: CryptoKey
 ): Promise<string> {
   const algorithm = { name: "AES-GCM", iv };
-  const crypto = require("crypto"); // window.crypto || window.webkitCrypto;
-  const subtle = crypto.subtle;
   const decryptedData = await subtle.decrypt(algorithm, key, ciphertext);
   return new TextDecoder().decode(decryptedData); // Convert to string
 }
@@ -120,12 +133,12 @@ function hexStringToBytes(hexString: string): Uint8Array {
 
 async function generateSymmetricKey() {
   const algorithm = { name: "AES-GCM", length: 256 };
-  const crypto = require("crypto"); // window.crypto;
-  const subtle = crypto.subtle;
   return await subtle.generateKey(algorithm, true, ["encrypt", "decrypt"]);
 }
 
-async function generateKeyPairFromPassword(passwordBytes: Uint8Array): Promise<KeyPair> {
+async function generateKeyPairFromPassword(
+  passwordBytes: Uint8Array
+): Promise<KeyPair> {
   const salt = Uint8Array.from({ length: 16 }, () => 0);
   const keyMaterial = await crypto.subtle.importKey(
     "raw",
@@ -157,4 +170,9 @@ async function generateKeyPairFromPassword(passwordBytes: Uint8Array): Promise<K
   };
 }
 
-export  { hexStringToBytes, generateKeyPairFromPassword, encryptMessage, decryptMessage };
+export {
+  hexStringToBytes,
+  generateKeyPairFromPassword,
+  encryptMessage,
+  decryptMessage,
+};
