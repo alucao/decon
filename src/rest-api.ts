@@ -40,7 +40,6 @@ async function fetchSocials(query: string | null) {
 
 async function fetchMessages(user: string) {
   const data = await getMessages(user);
-  console.log("Messages: " + data);
   return data;
 }
 

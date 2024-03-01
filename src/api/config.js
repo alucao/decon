@@ -17,7 +17,7 @@ async function getConfig() {
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyIjoic3Rha2UxdTk0NHB4azRweThmMGg4ZHJzamNuZGRyOXUzNDdzOXU5bTIwc256ZWFmd3lxMmN4M2s5NjUiLCJleHAiOjE3MzgxMDAwNDMsInRpZXIiOjEsInByb2pJRCI6ImNhcmRhbm8ifQ.EhUGSZsofThIZL30uwkZKnJ4O3AghqRXwcoRTiL88TA",
         BLOCKFROST_URL: "https://cardano-mainnet.blockfrost.io/api/v0",
         BLOCKFROST_KEY: "mainnetN08Xw3dFGIrTiXdK6AfE8FGMXJwqEU3E",
-        METADATA_LABEL: 987,
+        METADATA_LABEL: 989,
         POLLING_INTERVAL: 10000,
       }
     : {
@@ -29,7 +29,7 @@ async function getConfig() {
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyIjoic3Rha2UxdTk0NHB4azRweThmMGg4ZHJzamNuZGRyOXUzNDdzOXU5bTIwc256ZWFmd3lxMmN4M2s5NjUiLCJleHAiOjE3MzgxMDAwNDMsInRpZXIiOjEsInByb2pJRCI6ImNhcmRhbm8ifQ.EhUGSZsofThIZL30uwkZKnJ4O3AghqRXwcoRTiL88TA",
         BLOCKFROST_URL: "https://cardano-preprod.blockfrost.io/api/v0",
         BLOCKFROST_KEY: "preprodn0MIxSnJ4Qg4CmmXdstYgHeXth1DuAH7",
-        METADATA_LABEL: 987,
+        METADATA_LABEL: 989,
         POLLING_INTERVAL: 10000,
       };
 
