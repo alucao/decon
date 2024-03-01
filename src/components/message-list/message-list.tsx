@@ -58,18 +58,32 @@ function MessageList({
 
         return (
           <div className="message" key={message.guid}>
-            <span className="message-from">
-              <b>From:</b>
-              <button
-                type="button"
-                className="user-button btn btn-link"
-                data-bs-toggle="modal"
-                data-bs-target="#userModal"
-                onClick={() => selectUser(message.from)}
-              >
-                {message.from}
-              </button>
-            </span>
+            <div>
+              <span className="message-from">
+                <b>From:</b>
+                <button
+                  type="button"
+                  className="user-button btn btn-link"
+                  data-bs-toggle="modal"
+                  data-bs-target="#userModal"
+                  onClick={() => selectUser(message.from)}
+                >
+                  {message.from}
+                </button>
+              </span>
+              <span className="message-to">
+                <b>To:</b>
+                <button
+                  type="button"
+                  className="user-button btn btn-link"
+                  data-bs-toggle="modal"
+                  data-bs-target="#userModal"
+                  onClick={() => selectUser(message.to)}
+                >
+                  {message.to}
+                </button>
+              </span>
+            </div>
             <span className="message-date">
               Date: {new Date(message.ts * 1000).toString()}
             </span>
