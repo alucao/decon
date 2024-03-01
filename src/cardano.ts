@@ -133,7 +133,6 @@ const sendTransaction = async (api: any, auxiliaryData: any) => {
   console.log("Setting aux data");
   txBuilder.set_auxiliary_data(auxiliaryData);
   console.log("Adding inputs");
-  //txBuilder.add_inputs_from(txUnspentOutputs, 1);
 
   let txUnspentOutputs = Cardano.TransactionUnspentOutputs.new();
   const rawUtxos = await api.getUtxos();
