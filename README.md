@@ -26,6 +26,15 @@
 - Report bugs and suggest improvements via GitHub issue tracker.
 - Spread the word and support community growth.
 
+## Running locally
+```
+$ git clone git@github.com:alucao/decon.git
+$ cd ./decon
+$ npm install
+$ npm run dev
+```
+Browse to localhost (ie: http://localhost:8080/) in your web browser.
+
 ## Disclaimer
 
 Provided "as is" without warranty of any kind. Use at your own risk.
