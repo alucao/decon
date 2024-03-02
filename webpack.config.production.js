@@ -14,11 +14,13 @@ const {
 const webpack = require("webpack");
 const dotenv = require("dotenv");
 const { InjectManifest } = require("workbox-webpack-plugin");
+const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
 
 dotenv.config();
 
 module.exports = (env, options) => {
   return {
+    devtool: "source-map",
     mode: options.mode,
     entry: entryConfig,
     experiments: {
@@ -124,6 +126,11 @@ module.exports = (env, options) => {
         swSrc: "./src/service-worker.js",
         swDest: "service-worker.js",
         maximumFileSizeToCacheInBytes: 5000000,
+      }),
+      sentryWebpackPlugin({
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        org: "deconapp",
+        project: "javascript-react",
       }),
     ],
   };
