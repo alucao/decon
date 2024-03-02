@@ -1,6 +1,6 @@
 # **decon**
 
-**Decentralized Community Platform with On-Chain Storage on Cardano blockchain**
+**Decentralized forum with on-chain storage on Cardano blockchain**
 
 **Website**: [decon.app](https://decon.app)
 
