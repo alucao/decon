@@ -22,6 +22,7 @@ function Fetcher({ socials, refreshQueries }) {
   };
 
   useEffect(() => {
+    fetchData();
     const intervalId = setInterval(
       fetchData,
       new NinjaConfig().getCfg()?.POLLING_INTERVAL ?? 10000
@@ -37,7 +38,7 @@ function Fetcher({ socials, refreshQueries }) {
 
   const getStatus = () => {
     if (page > 1) {
-      return (<div className="fetcher-status">Synced</div>);
+      return <div className="fetcher-status">Synced</div>;
     }
 
     return (
