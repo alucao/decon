@@ -189,10 +189,18 @@ function App() {
 
       // get username from stakeAddress of wallet
       console.log("calling getStakeAddr from updateWallet");
-      let stakeAddress = await getStakeAddress(_api);
-      let user = await fetchUserByStakeAddr(stakeAddress);
-
-      setUsername(user?.user ?? null);
+      try {
+        let stakeAddress = await getStakeAddress(_api);
+        let user = await fetchUserByStakeAddr(stakeAddress);
+        setUsername(user?.user ?? null);
+      } catch (error) {
+        setAlertText(
+          "Error: Your wallet does not implement Cardano CIP-30. Use another wallet to be able to post messages."
+        );
+        setAlertType("alert-danger");
+        setShowAlert(true);
+        throw error;
+      }
     } else {
       console.log("SETTING API TO NULL!!");
       console.log("SETTING API TO NULL!!");
